@@ -120,8 +120,8 @@ void MazeGenerator::placeStart()
 {
 	// find a random spot on the maze and set 
 	// the coordinates to that point
-	this->position.xPos == MazeGenerator::randomNumber(this->mazeWidth);
-	this->position.yPos == MazeGenerator::randomNumber(this->mazeHeight);
+	this->position.xPos = MazeGenerator::randomNumber(this->mazeWidth);
+	this->position.yPos = MazeGenerator::randomNumber(this->mazeHeight);
 }
 
 	// during walk decine direction

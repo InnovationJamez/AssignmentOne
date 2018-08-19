@@ -1,14 +1,16 @@
 #include "MazeGenerator.h"
 
-// set the valles
+	// set Position
 
-void MazeGenerator::setMazeWidth(int a)
+void MazeGenerator::setPosition(int i, int j)
 {
-	this->mazeWidth = a;
+	this->position.xPos = i;
+	this->position.yPos = j;
 }
 
-void MazeGenerator::setMazeHeight(int a)
+void MazeGenerator::setDimensions(int a, int b)
 {
+	this->mazeWidth = a;
 	this->mazeHeight = a;
 }
 
@@ -19,13 +21,12 @@ void MazeGenerator::takeVallues()
 	int width, height;
 	std::cout << "Enter Maze width then height and hit enter" << std::endl;
 	std::cin >> width >> height;
-	std::cout << "\nYou entered a height: " 
+	std::cout << "\nYou entered the height: " 
 		<< height << " and width: " << width << std::endl;
-	MazeGenerator::setMazeWidth(width);
-	MazeGenerator::setMazeHeight(height);
+	MazeGenerator::setDimensions(width, height);
 }
 
-// fill in the maze
+	// fill in the maze
 
 void MazeGenerator::boardBuilder()
 {
@@ -37,7 +38,54 @@ void MazeGenerator::boardBuilder()
 			Cell condition;
 			temp.push_back(condition);
 		}
-		maze.push_back(temp);
+		this->maze.push_back(temp);
+	}
+}
+
+	///////////////////////////////// checkBoundries ///////////////////////////////
+
+bool MazeGenerator::checkNorthBound() {
+	if (this->position.yPos == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool MazeGenerator::checkSouthBound() {
+	if (this->position.yPos == (this->mazeHeight - 1))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool MazeGenerator::checkWestBound() {
+	if (this->position.xPos == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool MazeGenerator::checkEastBound()
+{
+	if (this->position.xPos == (this->mazeWidth - 1))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -45,73 +93,106 @@ void MazeGenerator::boardBuilder()
 
 bool MazeGenerator::checkNorth()
 {
-	bool answer;
-	if (this->position.yPos == 0 || this->maze[this->position.xPos]
-		[this->position.yPos-1].discovered == true)
+	if (this->maze[this->position.xPos][this->position.yPos-1].discovered == true)
 	{
-		answer = true;
+		return true;
 	}
 	else
 	{
-		answer = false;
+		return false;
 	}
-	return answer;
 }
 
 bool MazeGenerator::checkSouth()
 {
-	bool answer;
-	if (this->position.yPos == (this->mazeHeight-1) || this->maze[this->position.xPos]
-		[this->position.yPos+1].discovered == true)
+	if (this->maze[this->position.xPos][this->position.yPos+1].discovered == true)
 	{
-		answer = true;
+		return true;
 	}
 	else
 	{
-		answer = false;
+		return false;
 	}
-	return answer;
 }
 
 bool MazeGenerator::checkWest()
 {
-	bool answer;
-	if (this->position.xPos == 0 || this->maze[this->position.xPos-1]
-		[this->position.yPos].discovered == true)
+	if (this->maze[this->position.xPos-1][this->position.yPos].discovered == true)
 	{
-		answer = true;
+		return true;
 	}
 	else
 	{
-		answer = false;
+		return false;
 	}
-	return answer;
 }
 
 bool MazeGenerator::checkEast()
 {
-	bool answer;
-	if (this->position.xPos == (this->mazeHeight - 1) || this->maze[this->position.xPos+1]
-		[this->position.yPos].discovered == true)
+	if (this->maze[this->position.xPos+1][this->position.yPos].discovered == true)
 	{
-		answer = true;
+		return true;
 	}
 	else
 	{
-		answer = false;
+		return false;
 	}
-	return answer;
+}
+
+	// check canMove
+
+bool MazeGenerator::canMoveNorth() {
+	if (MazeGenerator::checkNorthBound() || MazeGenerator::checkNorth())
+	{
+		return false;
+	}
+	else
+	{
+		 return true;
+	}
+}
+
+bool MazeGenerator::canMoveSouth() {
+	if (MazeGenerator::checkSouthBound() || MazeGenerator::checkSouth())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool MazeGenerator::canMoveWest() {
+	if (MazeGenerator::checkWestBound() || MazeGenerator::checkWest())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool MazeGenerator::canMoveEast() {
+	if (MazeGenerator::checkEastBound() || MazeGenerator::checkEast())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 	// Generates a random number
 
-int MazeGenerator::randomNumber(int upperbound)
+int MazeGenerator::randomNumber(int upperBound)
 {
-	std::mt19937 generator(seed);
-	std::uniform_int_distribution<int> distribution(1, (upperbound - 1));
-	int numPicked = distribution(generator);
-	return numPicked;
-
+	std::random_device seed;
+	std::mt19937 gen(seed());
+	std::uniform_int_distribution<> dis(0, (upperBound-1));
+	return dis(gen);
 }
 
 	// place start
@@ -120,69 +201,160 @@ void MazeGenerator::placeStart()
 {
 	// find a random spot on the maze and set 
 	// the coordinates to that point
-	this->position.xPos = MazeGenerator::randomNumber(this->mazeWidth);
-	this->position.yPos = MazeGenerator::randomNumber(this->mazeHeight);
+	MazeGenerator::setPosition(MazeGenerator::randomNumber(this->mazeWidth),
+	MazeGenerator::randomNumber(this->mazeHeight));
 }
+
 
 	// during walk decine direction
 
-void MazeGenerator::decideDirection()
+DIRECTION MazeGenerator::decideDirection()
 {
-	std::vector<int>tempVector;
-	if (MazeGenerator::checkNorth()) {
-		tempVector.push_back(1);
+	std::vector<DIRECTION>tempVector;
+	if (MazeGenerator::canMoveNorth()) {
+		tempVector.push_back(NORTH);
 	}
-	if (MazeGenerator::checkSouth()) {
-		tempVector.push_back(2);
+	if (MazeGenerator::canMoveSouth()) {
+		tempVector.push_back(SOUTH);
 	}
-	if (MazeGenerator::checkWest()) {
-		tempVector.push_back(3);
+	if (MazeGenerator::canMoveSouth()) {
+		tempVector.push_back(WEST);
 	}
-	if (MazeGenerator::checkEast()) {
-		tempVector.push_back(4);
+	if (MazeGenerator::canMoveSouth()) {
+		tempVector.push_back(EAST);
 	}
 	if (tempVector.size() == 0) {
-		MazeGenerator::huntMode();
+		return NONE;
 	}
-	else {
-
+	else 
+	{
+		return tempVector[MazeGenerator::randomNumber(tempVector.size())];
 	}
 }
 
-	// walk in direction
+	// Connect the pieces as it moves
+
+void MazeGenerator::connectNorth()
+{
+	maze[this->position.xPos][this->position.yPos].northConnection = true;
+	maze[this->position.xPos][this->position.yPos - 1].southConnection = true;
+}
+
+void MazeGenerator::connectSouth()
+{
+	maze[this->position.xPos][this->position.yPos + 1].northConnection = true;
+	maze[this->position.xPos][this->position.yPos].southConnection = true;
+}
+
+void MazeGenerator::connectWest()
+{
+	maze[this->position.xPos][this->position.yPos].westConnection = true;
+	maze[this->position.xPos][this->position.yPos - 1].eastConnection = true;
+}
+
+void MazeGenerator::connectEast()
+{
+	maze[this->position.xPos][this->position.yPos].eastConnection = true;
+	maze[this->position.xPos][this->position.yPos + 1].westConnection = true;
+}
+
+	///////////          walk in direction             //////////////
 
 void MazeGenerator::walkNorth()
 {
-	maze[this->position.xPos][this->position.yPos].northConnection = true;
-	maze[this->position.xPos][this->position.yPos-1].southConnection = true;
 	this->position.yPos -= 1;
 }
 
 void MazeGenerator::walkSouth()
 {
-	maze[this->position.xPos][this->position.yPos+1].northConnection = true;
-	maze[this->position.xPos][this->position.yPos].southConnection = true;
 	this->position.yPos += 1;
 }
 
 void MazeGenerator::walkWest()
 {
-	maze[this->position.xPos][this->position.yPos].westConnection = true;
-	maze[this->position.xPos][this->position.yPos-1].eastConnection = true;
 	this->position.xPos -= 1;
 }
 
 void MazeGenerator::walkEast()
 {
-	maze[this->position.xPos][this->position.yPos].eastConnection = true;
-	maze[this->position.xPos][this->position.yPos+1].westConnection = true;
 	this->position.xPos += 1;
 }
 
-// hunt Mode 
+	// walk mode
+
+void MazeGenerator::walkMode()
+{
+	MazeGenerator::placeStart();
+	DIRECTION direction = MazeGenerator::decideDirection();
+	switch (direction)
+	{
+	case NORTH:
+		MazeGenerator::connectNorth();
+		MazeGenerator::walkNorth();
+		break;
+	case SOUTH:
+		MazeGenerator::connectSouth();
+		MazeGenerator::walkSouth();
+		break;
+	case WEST:
+		MazeGenerator::connectWest();
+		MazeGenerator::walkWest();
+		break;
+	case EAST:
+		MazeGenerator::connectEast();
+		MazeGenerator::walkWest();
+		break;
+	case NONE:
+		MazeGenerator::huntMode();
+		break;
+	default:
+		std::cout << "error in the decide direction function" << std::endl;
+	}
+}
+
+	// hunt check
+
+void MazeGenerator::huntChecker(int i, int j)
+{
+	if (!MazeGenerator::checkNorthBound() && MazeGenerator::checkNorth())
+	{
+		MazeGenerator::setPosition(i, j);
+		MazeGenerator::connectSouth();
+		MazeGenerator::walkMode();
+	}
+	else if (!MazeGenerator::checkSouthBound() && MazeGenerator::checkSouth())
+	{
+		MazeGenerator::setPosition(i, j);
+		MazeGenerator::connectNorth();
+		MazeGenerator::walkMode();
+	}
+	else if (!MazeGenerator::checkWestBound() && MazeGenerator::checkWest())
+	{
+		MazeGenerator::setPosition(i, j);
+		MazeGenerator::connectEast();
+		MazeGenerator::walkMode();
+	}
+	else if (!MazeGenerator::checkEastBound() && MazeGenerator::checkEast())
+	{
+		MazeGenerator::setPosition(i, j);
+		MazeGenerator::connectWest();
+		MazeGenerator::walkMode();
+	}
+}
+
+	// hunt Mode 
 
 void MazeGenerator::huntMode()
 {
-
+	for (int j = 0; j < this->mazeHeight; ++j)
+	{
+		for (int i = 0; i < this->mazeWidth; ++i)
+		{
+			if (maze[i][j].discovered == false )
+			{
+				MazeGenerator::huntChecker(i,j);
+			}
+		}
+	}
 }
 

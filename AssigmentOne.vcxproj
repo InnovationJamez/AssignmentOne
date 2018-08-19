@@ -112,9 +112,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazeLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazeLoader.cpp" />
     <ClCompile Include="MazeMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

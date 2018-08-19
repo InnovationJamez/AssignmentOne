@@ -1,8 +1,6 @@
 #include<iostream>
 #include<vector>
-#include<chrono>
 #include<random>
-
 
 struct Cell
 {
@@ -18,6 +16,14 @@ struct coords
 	int xPos, yPos;
 };
 
+enum DIRECTION{
+	NORTH = 1,
+	SOUTH = 2,
+	WEST = 3,
+	EAST = 4,
+	NONE = 5
+};
+
 class MazeGenerator
 {
 private:
@@ -27,9 +33,11 @@ private:
 	std::vector<std::vector<Cell>>maze;
 public:
 
-	// set the valles
-	void setMazeWidth(int a);
-	void setMazeHeight(int a);
+	// set the width and height
+	void setDimensions(int a, int b);
+
+	// set position
+	void setPosition(int i, int j);
 
 	// get input for dimensions of maze
 	void takeVallues();
@@ -38,7 +46,17 @@ public:
 	
 	void boardBuilder();
 
-	// check position
+	// checkBoundries
+
+	bool checkNorthBound();
+
+	bool checkSouthBound();
+
+	bool checkWestBound();
+
+	bool checkEastBound();
+
+	// check surounding spaces
 	bool checkNorth();
 
 	bool checkSouth();
@@ -46,6 +64,20 @@ public:
 	bool checkWest();
 
 	bool checkEast();
+
+	// check canMove
+
+	bool canMoveNorth();
+
+	bool canMoveSouth();
+
+	bool canMoveWest();
+
+	bool canMoveEast();
+
+	// hunt check
+
+	void huntChecker(int i, int j);
 
 	/*
 	This part of the program will be filling the
@@ -64,7 +96,7 @@ public:
 
 	// decine direction
 
-	void decideDirection();
+	DIRECTION decideDirection();
 
 	// walk in direction
 
@@ -75,6 +107,20 @@ public:
 	void walkWest();
 
 	void walkEast();
+
+	// connect prieces
+
+	void connectNorth();
+
+	void connectSouth();
+
+	void connectWest();
+
+	void connectEast();
+
+	// walk mode
+
+	void walkMode();
 
 	// hunt mode
 

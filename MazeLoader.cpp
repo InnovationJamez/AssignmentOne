@@ -1,5 +1,29 @@
 #include "MazeLoader.h"
 
+	// Enter files names
+
+void MazeLoader::enterBinName()
+{
+	std::cout << "Enter the file name and extension: " << std::endl;
+	std::cin >> this->name;
+	std::cout << "\nYou entered " << this->name << std::endl;
+	std::cout << "Is this correct y: yes n: no" << std::endl;
+	std::string answer;
+	std::cin >> answer;
+	std::cout << "\n";
+	if (answer == "y" || answer == "Y")
+	{
+		std::cout << "thank you" << std::endl;
+	}
+	else
+	{
+		MazeLoader::enterBinName();
+	}
+
+}
+
+	// start files
+
 void MazeLoader::startFiles()
 {
 	this->binFile.open("binFile.bin");
@@ -27,7 +51,7 @@ void MazeLoader::readLines()
 
 double MazeLoader::binToDecimal(std::string a)
 {
-	int tempInt=0;
+	double tempInt=0;
 	for (int i = 0; i < (a.size() - 1); ++i)
 	{
 		if (a[i] == '1')

@@ -12,6 +12,7 @@ struct point {
 class MazeLoader
 {
 private:
+	std::string name;
 	int mazeWidth;
 	int mazeHeight;
 	int noOfEdges;
@@ -19,6 +20,13 @@ private:
 	std::ofstream svgFile;
 	std::vector<std::string>binFileVector;
 public:
+
+	// Enter files names
+
+	void enterBinName();
+
+	// start files
+
 	void startFiles();
 	void readLines();
 

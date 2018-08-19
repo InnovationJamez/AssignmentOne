@@ -16,7 +16,7 @@ int main()
 	}
 	if (answer == 2)
 	{
-		std::cout << "stuff will go in here" << std::endl;
+		MazeLoader loaderOne;
 	}
 	else
 	{

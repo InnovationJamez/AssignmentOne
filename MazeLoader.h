@@ -24,7 +24,11 @@ public:
 
 	// binary to decimal
 
-	int binToDecimal(std::string a);
+	double binToDecimal(std::string a);
+
+	// Read binFileVector
+
+	void readBinFileVector();
 
 	// Creating a edditing SVG Files
 

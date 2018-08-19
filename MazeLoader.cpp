@@ -25,9 +25,9 @@ void MazeLoader::readLines()
 
 	// binary to decimal
 
-int MazeLoader::binToDecimal(std::string a)
+double MazeLoader::binToDecimal(std::string a)
 {
-	int tempInt;
+	int tempInt=0;
 	for (int i = 0; i < (a.size() - 1); ++i)
 	{
 		if (a[i] == '1')

@@ -1,10 +1,27 @@
 #include "MazeGenerator.h"
+#include "MazeLoader.h"
 
 int main()
 {
-	MazeGenerator mazeOne;
-	mazeOne.takeVallues();
-	mazeOne.boardBuilder();
-	mazeOne.walkMode();
+	int answer;
+	std::cout << "1: Generate a maze\n2:Load Binary File\n";
+	std::cin >> answer;
+	std::cout << "You selected " << answer << std::endl;
+	if (answer == 1)
+	{
+		MazeGenerator mazeOne;
+		mazeOne.takeVallues();
+		mazeOne.boardBuilder();
+		mazeOne.walkMode();
+	}
+	if (answer == 2)
+	{
+		std::cout << "stuff will go in here" << std::endl;
+	}
+	else
+	{
+		std::cout << "Invalid input" << std::endl;
+	}
+	
 	return 0;
 }

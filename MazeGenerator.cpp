@@ -30,10 +30,10 @@ void MazeGenerator::takeVallues()
 
 void MazeGenerator::boardBuilder()
 {
-	for (int i = 0; i < this->mazeWidth; ++i)
+	for (int i = 0; i < (this->mazeWidth-1); ++i)
 	{
 		std::vector<Cell>temp;
-		for (int j = 0; j < this->mazeHeight; ++j)
+		for (int j = 0; j < (this->mazeHeight-1); ++j)
 		{
 			Cell condition;
 			temp.push_back(condition);
@@ -226,7 +226,7 @@ DIRECTION MazeGenerator::decideDirection()
 	if (tempVector.size() == 0) {
 		return NONE;
 	}
-	else 
+	else
 	{
 		return tempVector[MazeGenerator::randomNumber(tempVector.size())];
 	}
@@ -356,4 +356,92 @@ void MazeGenerator::huntMode()
 			}
 		}
 	}
+}
+
+/*
+	Binary Files creation
+*/
+
+void MazeGenerator::openBinFile()
+{
+	this->binFile.open("binFile.bin");
+}
+
+void MazeGenerator::setFirstThreeNumbers()
+{
+
+}
+
+void MazeGenerator::setSouthWall(int i, int j)
+{
+	coords a, b;
+	a.xPos = i;
+	a.yPos = j;
+	b.xPos = i;
+	b.yPos = j + 1;
+}
+
+void MazeGenerator::setEastWall(int i, int j)
+{
+	coords a, b;
+	a.xPos = i;
+	a.yPos = j;
+	b.xPos = i + 1;
+	b.yPos = j;
+}
+
+void MazeGenerator::mazeConnectionChecker()
+{
+	for (int j = 0; j < (this->mazeHeight - 1); j++)
+	{
+		for (int i = 0; i < (this->mazeWidth - 2); i++)
+		{
+			if (this->maze[i][j].eastConnection == false)
+			{
+				MazeGenerator::setEastWall(i, j);
+			}
+		}
+	}
+	for (int i = 0; i < (this->mazeWidth - 1); i++)
+	{
+		for (int j = 0; j < (this->mazeWidth - 2); j++)
+		{
+			if (this->maze[i][j].southConnection == false)
+			{
+				MazeGenerator::setSouthWall(i, j);
+			}
+		}
+	}
+}
+
+std::string MazeGenerator::intToBin(int num)
+{
+	std::string binNum;
+	while (num > 0)
+	{
+		if (num % 2 == 1)
+		{
+			binNum = '1' + binNum;
+		}
+		else
+		{
+			binNum = '0' + binNum;
+		}
+		num = num/2;
+	}
+	while (binNum.size() < 32)
+	{
+		binNum = '0' + binNum;
+	}
+	return binNum;
+}
+
+void MazeGenerator::binFileEditor()
+{
+
+}
+
+void MazeGenerator::closeBinFile()
+{
+
 }

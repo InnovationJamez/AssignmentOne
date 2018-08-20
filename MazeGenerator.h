@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<random>
+#include<fstream>
 
 struct Cell
 {
@@ -27,6 +28,7 @@ enum DIRECTION{
 class MazeGenerator
 {
 private:
+	std::fstream binFile;
 	coords position;
 	int mazeWidth;
 	int mazeHeight;
@@ -125,5 +127,26 @@ public:
 	// hunt mode
 
 	void huntMode();
+
+	/*
+	Binary Files creation
+	*/
+
+	void openBinFile();
+
+	void setFirstThreeNumbers();
+
+	void mazeConnectionChecker();
+
+	void setSouthWall(int i, int j);
+
+	void setEastWall(int i, int j);
+
+	std::string intToBin(int num);
+
+	void binFileEditor();
+
+	void closeBinFile();
+
 };
 

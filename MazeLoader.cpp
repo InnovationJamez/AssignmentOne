@@ -5,8 +5,8 @@
 void MazeLoader::enterBinName()
 {
 	std::cout << "Enter the file name and extension: " << std::endl;
-	std::cin >> this->name;
-	std::cout << "\nYou entered " << this->name << std::endl;
+	std::cin >> name;
+	std::cout << "\nYou entered " << name << std::endl;
 	std::cout << "Is this correct y: yes n: no" << std::endl;
 	std::string answer;
 	std::cin >> answer;
@@ -20,13 +20,7 @@ void MazeLoader::enterBinName()
 		MazeLoader::enterBinName();
 	}
 
-}
-
-	// start files
-
-void MazeLoader::startFiles()
-{
-	this->binFile.open("binFile.bin");
+	this->binFile.open(name.c_str());
 	this->svgFile.open("generatedMaze.svg");
 }
 

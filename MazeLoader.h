@@ -13,9 +13,9 @@ class MazeLoader
 {
 private:
 	std::string name;
-	int mazeWidth;
-	int mazeHeight;
-	int noOfEdges;
+	double mazeWidth;
+	double mazeHeight;
+	double noOfEdges;
 	std::fstream binFile;
 	std::ofstream svgFile;
 	std::vector<std::string>binFileVector;
@@ -27,7 +27,6 @@ public:
 
 	// start files
 
-	void startFiles();
 	void readLines();
 
 	// binary to decimal

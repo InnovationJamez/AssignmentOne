@@ -13,10 +13,19 @@ int main()
 		mazeOne.takeVallues();
 		mazeOne.boardBuilder();
 		mazeOne.walkMode();
+		mazeOne.openBinFile();
+		mazeOne.setFirstThreeNumbers();
+		mazeOne.mazeConnectionChecker();
+		mazeOne.closeBinFile();
 	}
 	if (answer == 2)
 	{
 		MazeLoader loaderOne;
+		loaderOne.enterBinName();
+		loaderOne.readLines();
+		loaderOne.startSVG();
+		loaderOne.readBinFileVector();
+		loaderOne.endSVG();
 	}
 	else
 	{

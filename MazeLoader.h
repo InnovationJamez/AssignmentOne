@@ -12,10 +12,10 @@ struct point {
 class MazeLoader
 {
 private:
-	std::string name;
 	double mazeWidth;
 	double mazeHeight;
 	double noOfEdges;
+	int fileSize;
 	std::fstream binFile;
 	std::ofstream svgFile;
 	std::vector<std::string>binFileVector;
@@ -24,6 +24,18 @@ public:
 	// Enter files names
 
 	void enterBinName();
+
+	// check if file is open and valid
+
+	bool checkFile();
+
+	// check the file extension
+
+	bool checkExten(std::string name);
+
+	// check file size
+
+	bool checkFileSize();
 
 	// start files
 

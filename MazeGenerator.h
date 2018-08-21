@@ -90,7 +90,7 @@ public:
 
 	// Generates a random number
 
-	int randomNumber(int upperbound);
+	double randomNumber(double upperbound);
 
 	// placeStart
 
@@ -134,17 +134,23 @@ public:
 
 	void openBinFile();
 
+	double MazeGenerator::countEdges();
+
 	void setFirstThreeNumbers();
 
 	void mazeConnectionChecker();
 
-	void setSouthWall(int i, int j);
+	void setEdge(coords a, coords b);
 
-	void setEastWall(int i, int j);
+	coords setSouthWallA(int i, int j);
+	coords setSouthWallB(int i, int j);
+
+	coords setEastWallA(int i, int j);
+	coords setEastWallB(int i, int j);
 
 	std::string intToBin(int num);
 
-	void binFileEditor();
+	void binFileEditor(std::string input);
 
 	void closeBinFile();
 

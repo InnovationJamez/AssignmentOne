@@ -4,6 +4,7 @@
 
 void MazeLoader::enterBinName()
 {
+	std::string name;
 	std::cout << "Enter the file name and extension: " << std::endl;
 	std::cin >> name;
 	std::cout << "\nYou entered " << name << std::endl;
@@ -20,17 +21,100 @@ void MazeLoader::enterBinName()
 		MazeLoader::enterBinName();
 	}
 
+	if (!MazeLoader::checkExten(name))
+	{
+		MazeLoader::enterBinName();
+	}
+
 	this->binFile.open(name.c_str());
-	this->svgFile.open("generatedMaze.svg");
+	this->svgFile.open("generatedMaze.svg", std::ios::binary |
+		std::ios::in | std::ios::out | std::ios::trunc);
+
+	if (!MazeLoader::checkFile())
+	{
+		MazeLoader::enterBinName();
+	}
+	if (!MazeLoader::checkFileSize())
+	{
+		MazeLoader::enterBinName();
+	}
 }
+
+	// check if file is open and valid
+
+bool MazeLoader::checkFile()
+{
+	if (this->binFile.is_open())
+	{
+		return true;
+
+	}
+	else
+	{
+		std::cout << "file did not open" << std::endl;
+		return false;
+	}
+}
+
+	// check the file extension
+
+bool MazeLoader::checkExten(std::string name)
+{
+	bool x = false;
+	std::string tempString;
+	for (int i = 0; i < name.size(); i++)
+	{
+		if (x == false)
+		{
+			if (name[i] == '.')
+			{
+				x = true;
+			}
+		}
+		else 
+		{
+			tempString += name[i];
+		}
+	}
+	if (tempString == "bin")
+	{
+		return true;
+	}
+	else
+	{
+		std::cout << "file type is invalid" << std::endl;
+		return false;
+	}
+}
+
+	// check file size
+
+bool MazeLoader::checkFileSize()
+{
+	this->binFile.seekg(0, std::ios::end);
+	std::string tempString;
+	this->fileSize = (int)this->binFile.tellg();
+	if (this->fileSize <= 0)
+	{
+		std::cout << "file is empty" << std::endl;
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+	// start files
 
 void MazeLoader::readLines()
 {
 	char ch;
+	this->binFile.seekg(0, std::ios::beg);
 	std::string tempString;
-	while (binFile.good())
+	while (this->binFile.tellg() < this->fileSize)
 	{
-		binFile.get(ch);
+		this->binFile.get(ch);
 		tempString = ch + tempString;
 		if (tempString.size() == 32)
 		{
@@ -46,11 +130,11 @@ void MazeLoader::readLines()
 double MazeLoader::binToDecimal(std::string a)
 {
 	double tempInt=0;
-	for (int i = 0; i < (a.size() - 1); ++i)
+	for (int i = 0; i< a.size(); ++i)
 	{
 		if (a[i] == '1')
 		{
-			tempInt += pow(2, i);
+			tempInt += pow(2,i);
 		}
 	}
 	return tempInt;
@@ -60,28 +144,28 @@ double MazeLoader::binToDecimal(std::string a)
 
 void MazeLoader::readBinFileVector()
 {
-	this->mazeWidth = MazeLoader::binToDecimal(binFileVector[0]);
-	this->mazeHeight = MazeLoader::binToDecimal(binFileVector[1]);
-	this->noOfEdges = MazeLoader::binToDecimal(binFileVector[2]);
+	this->mazeWidth = MazeLoader::binToDecimal(this->binFileVector[0]);
+	this->mazeHeight = MazeLoader::binToDecimal(this->binFileVector[1]);
+	this->noOfEdges = MazeLoader::binToDecimal(this->binFileVector[2]);
 
 	for (int i = 3; i < (this->binFileVector.size() - 1); ++i)
 	{
 		point a, b;
 		if (i % 4 == 3) 
 		{
-			a.x = MazeLoader::binToDecimal(binFileVector[i]);
+			a.x = MazeLoader::binToDecimal(this->binFileVector[i]);
 		}
 		if (i % 4 == 0) 
 		{
-			a.y = MazeLoader::binToDecimal(binFileVector[i]);
+			a.y = MazeLoader::binToDecimal(this->binFileVector[i]);
 		}
 		if (i % 4 == 1)
 		{
-			b.x = MazeLoader::binToDecimal(binFileVector[i]);
+			b.x = MazeLoader::binToDecimal(this->binFileVector[i]);
 		}
 		if (i % 4 == 2) 
 		{
-			b.y = MazeLoader::binToDecimal(binFileVector[i]);
+			b.y = MazeLoader::binToDecimal(this->binFileVector[i]);
 			MazeLoader::addEdge(a,b);
 		}
 	}

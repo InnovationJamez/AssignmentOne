@@ -110,6 +110,8 @@ public:
 
 	void walkEast();
 
+	void setDiscovered();
+
 	// connect prieces
 
 	void connectNorth();

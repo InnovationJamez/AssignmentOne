@@ -181,45 +181,59 @@ void MazeLoader::startSVG()
 	this->svgFile << "<rect width='1' height='1' style='fill: white' />\n";
 
 	// Draw border
-	this->svgFile << "<line stroke='black' stroke-width='0.01' ";
+	MazeLoader::lineDefine();
 	this->svgFile << "x1='0' y1='0' x2='1' y2='0'/>\n";
 
-	this->svgFile << "<line stroke='black' stroke-width='0.01' ";
+	MazeLoader::lineDefine();
 	this->svgFile << "x1='1' y1='0' x2='1' y2='1'/>\n";
 
-	this->svgFile << "<line stroke='black' stroke-width='0.01' ";
+	MazeLoader::lineDefine();
 	this->svgFile << "x1='1' y1='1' x2='0' y2='1'/>\n";
 
-	this->svgFile << "<line stroke='black' stroke-width='0.01' ";
+	MazeLoader::lineDefine();
 	this->svgFile << "x1='0' y1='1' x2='0' y2='0'/>\n";
+}
+
+void MazeLoader::lineDefine()
+{
+	this->svgFile << "<line stroke='black' stroke-width='";
+	this->svgFile << 0.01;
+	this->svgFile << "' ";
 }
 
 void MazeLoader::addEdge()
 {
 	double wallWidth = 1 / this->mazeWidth;
 	double wallHeight = 1 / this->mazeHeight;
-	if (this->a.x == this->b.x)
+	this->a.x++;
+	this->a.y++;
+	this->b.x++;
+	this->b.y++;
+
+	if (this->a.y == this->b.y)
 	{
-		this->svgFile << "<line stroke='black' stroke-width='0.01' x1='";
+		MazeLoader::lineDefine();
+		this->svgFile << " x1='";
 		this->svgFile << wallWidth * this->a.x;
 		this->svgFile << "' y1='";
 		this->svgFile << wallHeight * this->a.y;
 		this->svgFile << "' x2='";
-		this->svgFile << wallWidth * this->b.x;
+		this->svgFile << wallWidth * this->a.x;
 		this->svgFile << "' y2='";
-		this->svgFile << wallHeight * this->b.y - wallHeight;
+		this->svgFile << wallHeight * this->a.y - wallHeight;
 		this->svgFile << "'/>\n";
 	}
 	else
 	{
-		this->svgFile << "<line stroke='black' stroke-width='0.01' x1='";
+		MazeLoader::lineDefine();
+		this->svgFile << " x1='";
 		this->svgFile << wallWidth * this->a.x;
 		this->svgFile << "' y1='";
 		this->svgFile << wallHeight * this->a.y;
 		this->svgFile << "' x2='";
-		this->svgFile << wallWidth * this->b.x - wallWidth;
+		this->svgFile << wallWidth * this->a.x - wallWidth;
 		this->svgFile << "' y2='";
-		this->svgFile << wallHeight * this->b.y;
+		this->svgFile << wallHeight * this->a.y;
 		this->svgFile << "'/>\n";
 	}
 }

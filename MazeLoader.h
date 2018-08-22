@@ -54,6 +54,7 @@ public:
 	// Creating a edditing SVG Files
 
 	void startSVG();
+	void lineDefine();
 	void addEdge();
 	void endSVG();
 };

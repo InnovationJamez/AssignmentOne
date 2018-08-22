@@ -75,7 +75,7 @@ bool MazeGenerator::checkSouthBound() {
 }
 
 bool MazeGenerator::checkWestBound() {
-	if (this->position.xPos == 0)
+	if (this->position.xPos < 1)
 	{
 		return true;
 	}
@@ -239,6 +239,7 @@ void MazeGenerator::placeStart()
 	// the coordinates to that point
 	MazeGenerator::setPosition(MazeGenerator::randomNumber(this->mazeWidth),
 	MazeGenerator::randomNumber(this->mazeHeight));
+	MazeGenerator::setDiscovered();
 }
 
 
@@ -272,26 +273,34 @@ DIRECTION MazeGenerator::decideDirection()
 
 void MazeGenerator::connectNorth()
 {
-	this->maze[this->position.xPos][this->position.yPos].northConnection = true;
-	this->maze[this->position.xPos][this->position.yPos-1].southConnection = true;
+	this->maze[this->position.xPos]
+		[this->position.yPos].northConnection = true;
+	this->maze[this->position.xPos]
+		[this->position.yPos-1].southConnection = true;
 }
 
 void MazeGenerator::connectSouth()
 {
-	this->maze[this->position.xPos][this->position.yPos].southConnection = true;
-	this->maze[this->position.xPos][this->position.yPos+1].northConnection = true;
+	this->maze[this->position.xPos]
+		[this->position.yPos].southConnection = true;
+	this->maze[this->position.xPos]
+		[this->position.yPos+1].northConnection = true;
 }
 
 void MazeGenerator::connectWest()
 {
-	this->maze[this->position.xPos][this->position.yPos].westConnection = true;
-	this->maze[this->position.xPos-1][this->position.yPos].eastConnection = true;
+	this->maze[this->position.xPos]
+		[this->position.yPos].westConnection = true;
+	this->maze[this->position.xPos-1]
+		[this->position.yPos].eastConnection = true;
 }
 
 void MazeGenerator::connectEast()
 {
-	this->maze[this->position.xPos][this->position.yPos].eastConnection = true;
-	this->maze[this->position.xPos+1][this->position.yPos].westConnection = true;
+	this->maze[this->position.xPos]
+		[this->position.yPos].eastConnection = true;
+	this->maze[this->position.xPos+1]
+		[this->position.yPos].westConnection = true;
 }
 
 	///////////          walk in direction             //////////////
@@ -316,29 +325,42 @@ void MazeGenerator::walkEast()
 	this->position.xPos += 1;
 }
 
+void MazeGenerator::setDiscovered()
+{
+	this->maze[this->position.xPos]
+		[this->position.yPos].discovered = true;
+}
+
 	// walk mode
 
 void MazeGenerator::walkMode()
 {
-	MazeGenerator::placeStart();
 	DIRECTION direction = MazeGenerator::decideDirection();
 	switch (direction)
 	{
 	case NORTH:
 		MazeGenerator::connectNorth();
 		MazeGenerator::walkNorth();
+		MazeGenerator::setDiscovered();
+		MazeGenerator::walkMode();
 		break;
 	case SOUTH:
 		MazeGenerator::connectSouth();
 		MazeGenerator::walkSouth();
+		MazeGenerator::setDiscovered();
+		MazeGenerator::walkMode();
 		break;
 	case WEST:
 		MazeGenerator::connectWest();
 		MazeGenerator::walkWest();
+		MazeGenerator::setDiscovered();
+		MazeGenerator::walkMode();
 		break;
 	case EAST:
 		MazeGenerator::connectEast();
-		MazeGenerator::walkWest();
+		MazeGenerator::walkEast();
+		MazeGenerator::setDiscovered();
+		MazeGenerator::walkMode();
 		break;
 	case NONE:
 		MazeGenerator::huntMode();
@@ -352,29 +374,43 @@ void MazeGenerator::walkMode()
 
 void MazeGenerator::huntChecker(int i, int j)
 {
-	if (!MazeGenerator::checkNorthBound() && MazeGenerator::checkNorth())
+	MazeGenerator::setPosition(i, j);
+	if (!MazeGenerator::checkNorthBound())
 	{
-		MazeGenerator::setPosition(i, j);
-		MazeGenerator::connectSouth();
-		MazeGenerator::walkMode();
+
+		if (MazeGenerator::checkNorth())
+		{
+			MazeGenerator::connectNorth();
+			MazeGenerator::setDiscovered();
+			MazeGenerator::walkMode();
+		}
 	}
-	else if (!MazeGenerator::checkSouthBound() && MazeGenerator::checkSouth())
+	if (!MazeGenerator::checkSouthBound())
 	{
-		MazeGenerator::setPosition(i, j);
-		MazeGenerator::connectNorth();
-		MazeGenerator::walkMode();
+		if (MazeGenerator::checkSouth())
+		{
+			MazeGenerator::connectSouth();
+			MazeGenerator::setDiscovered();
+			MazeGenerator::walkMode();
+		}
 	}
-	else if (!MazeGenerator::checkWestBound() && MazeGenerator::checkWest())
+	if (!MazeGenerator::checkWestBound())
 	{
-		MazeGenerator::setPosition(i, j);
-		MazeGenerator::connectEast();
-		MazeGenerator::walkMode();
+		if (MazeGenerator::checkWest())
+		{
+			MazeGenerator::connectWest();
+			MazeGenerator::setDiscovered();
+			MazeGenerator::walkMode();
+		}
 	}
-	else if (!MazeGenerator::checkEastBound() && MazeGenerator::checkEast())
+	if (!MazeGenerator::checkEastBound())
 	{
-		MazeGenerator::setPosition(i, j);
-		MazeGenerator::connectWest();
-		MazeGenerator::walkMode();
+		if (MazeGenerator::checkEast())
+		{
+			MazeGenerator::connectEast();
+			MazeGenerator::setDiscovered();
+			MazeGenerator::walkMode();
+		}
 	}
 }
 
@@ -407,9 +443,9 @@ void MazeGenerator::openBinFile()
 double MazeGenerator::countEdges()
 {
 	double count = 0;
-	for (int j = 0; j < (this->mazeHeight - 1); j++)
+	for (int j = 0; j < (this->mazeHeight); j++)
 	{
-		for (int i = 0; i < (this->mazeWidth - 2); i++)
+		for (int i = 0; i < (this->mazeWidth); i++)
 		{
 			if (this->maze[i][j].eastConnection == false)
 			{
@@ -417,9 +453,9 @@ double MazeGenerator::countEdges()
 			}
 		}
 	}
-	for (int i = 0; i < (this->mazeWidth - 1); i++)
+	for (int i = 0; i < (this->mazeWidth); i++)
 	{
-		for (int j = 0; j < (this->mazeWidth - 2); j++)
+		for (int j = 0; j < (this->mazeWidth); j++)
 		{
 			if (this->maze[i][j].southConnection == false)
 			{
@@ -472,9 +508,9 @@ coords MazeGenerator::setEastWallB(int i, int j)
 
 void MazeGenerator::mazeConnectionChecker()
 {
-	for (int j = 0; j < (this->mazeHeight - 1); j++)
+	for (int j = 0; j < (this->mazeHeight); j++)
 	{
-		for (int i = 0; i < (this->mazeWidth - 2); i++)
+		for (int i = 0; i < (this->mazeWidth); i++)
 		{
 			if (this->maze[i][j].eastConnection == false)
 			{
@@ -484,9 +520,9 @@ void MazeGenerator::mazeConnectionChecker()
 			}
 		}
 	}
-	for (int i = 0; i < (this->mazeWidth - 1); i++)
+	for (int i = 0; i < (this->mazeWidth); i++)
 	{
-		for (int j = 0; j < (this->mazeWidth - 2); j++)
+		for (int j = 0; j < (this->mazeWidth); j++)
 		{
 			if (this->maze[i][j].southConnection == false)
 			{

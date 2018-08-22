@@ -12,6 +12,7 @@ int main()
 		MazeGenerator mazeOne;
 		mazeOne.takeVallues();
 		mazeOne.boardBuilder();
+		mazeOne.placeStart();
 		mazeOne.walkMode();
 		mazeOne.openBinFile();
 		mazeOne.setFirstThreeNumbers();

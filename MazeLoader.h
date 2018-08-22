@@ -12,6 +12,8 @@ struct point {
 class MazeLoader
 {
 private:
+	point a;
+	point b;
 	double mazeWidth;
 	double mazeHeight;
 	double noOfEdges;
@@ -52,7 +54,7 @@ public:
 	// Creating a edditing SVG Files
 
 	void startSVG();
-	void addEdge(point a, point b);
+	void addEdge();
 	void endSVG();
 };
 

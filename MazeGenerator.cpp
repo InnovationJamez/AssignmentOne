@@ -479,7 +479,7 @@ void MazeGenerator::mazeConnectionChecker()
 			if (this->maze[i][j].eastConnection == false)
 			{
 				coords a = MazeGenerator::setEastWallA(i, j);
-				coords b = MazeGenerator::setEastWallA(i, j);
+				coords b = MazeGenerator::setEastWallB(i, j);
 				MazeGenerator::setEdge(a,b);
 			}
 		}
@@ -491,7 +491,7 @@ void MazeGenerator::mazeConnectionChecker()
 			if (this->maze[i][j].southConnection == false)
 			{
 				coords a = MazeGenerator::setSouthWallA(i, j);
-				coords b = MazeGenerator::setSouthWallA(i, j);
+				coords b = MazeGenerator::setSouthWallB(i, j);
 				MazeGenerator::setEdge(a,b);
 			}
 		}

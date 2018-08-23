@@ -225,10 +225,12 @@ bool MazeGenerator::canMoveEast() {
 
 double MazeGenerator::randomNumber(double upperBound)
 {
+	double randomNumber;
 	std::random_device seed;
 	std::mt19937 gen(seed());
 	std::uniform_int_distribution<> dis(0, (upperBound-1));
-	return dis(gen);
+	randomNumber = dis(gen);
+	return randomNumber;
 }
 
 	// place start

@@ -38,6 +38,11 @@ void MazeLoader::enterBinName()
 	{
 		MazeLoader::enterBinName();
 	}
+	if (!this->svgFile.is_open())
+	{
+		std::cout << "svg did not open" << std::endl;
+		MazeLoader::enterBinName();
+	}
 }
 
 	// check if file is open and valid
@@ -174,33 +179,64 @@ void MazeLoader::readBinFileVector()
 
 	// Creating Edditing and closing SVG File 
 
-void MazeLoader::startSVG()
+void MazeLoader::beginSVG()
 {
 	this->svgFile << "<svg viewBox='0 0 1 1' width='500' height='500' ";
 	this->svgFile << "xmlns='http://www.w3.org/2000/svg'>\n";
 	this->svgFile << "<rect width='1' height='1' style='fill: white' />\n";
+}
 
+void MazeLoader::drawBorder()
+{
 	// Draw border
-	MazeLoader::lineDefine();
+	MazeLoader::lineDefineHeight();
 	this->svgFile << "x1='0' y1='0.005' x2='1' y2='0.005'/>\n";
 
-	MazeLoader::lineDefine();
+	MazeLoader::lineDefineWidth();
 	this->svgFile << "x1='0.995' y1='0' x2='0.995' y2='1'/>\n";
 
-	MazeLoader::lineDefine();
+	MazeLoader::lineDefineHeight();
 	this->svgFile << "x1='1' y1='0.995' x2='0' y2='0.995'/>\n";
 
-	MazeLoader::lineDefine();
+	MazeLoader::lineDefineWidth();
 	this->svgFile << "x1='0.005' y1='1' x2='0.005' y2='0'/>\n";
-
 }
 
 // line define
 
-void MazeLoader::lineDefine()
+void MazeLoader::lineDefineWidth()
 {
 	this->svgFile << "<line stroke= 'black' stroke-width='";
-	this->svgFile << 0.01;
+	if(this->mazeWidth > 50)
+	{
+		this->svgFile << 0.005;
+	}
+	if (this->mazeWidth > 100)
+	{
+		this->svgFile << 0.0001;
+	}
+	else
+	{
+		this->svgFile << 0.01;
+	}
+	this->svgFile << "' ";
+}
+
+void MazeLoader::lineDefineHeight()
+{
+	this->svgFile << "<line stroke= 'black' stroke-width='";
+	if (this->mazeHeight > 50)
+	{
+		this->svgFile << 0.005;
+	}
+	if (this->mazeHeight > 100)
+	{
+		this->svgFile << 0.0001;
+	}
+	else
+	{
+		this->svgFile << 0.01;
+	}
 	this->svgFile << "' ";
 }
 
@@ -218,7 +254,7 @@ void MazeLoader::addEdge()
 
 	if (this->a.y == this->b.y)
 	{
-		MazeLoader::lineDefine();
+		MazeLoader::lineDefineWidth();
 		this->svgFile << " x1='";
 		this->svgFile << wallWidth * this->a.x + buffer;
 		this->svgFile << "' y1='";
@@ -231,7 +267,7 @@ void MazeLoader::addEdge()
 	}
 	else
 	{
-		MazeLoader::lineDefine();
+		MazeLoader::lineDefineHeight();
 		this->svgFile << " x1='";
 		this->svgFile << wallWidth * this->a.x + buffer;
 		this->svgFile << "' y1='";

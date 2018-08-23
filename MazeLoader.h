@@ -53,8 +53,10 @@ public:
 
 	// Creating a edditing SVG Files
 
-	void startSVG();
-	void lineDefine();
+	void beginSVG();
+	void lineDefineWidth();
+	void lineDefineHeight();
+	void drawBorder();
 	void addEdge();
 	void endSVG();
 };

@@ -24,7 +24,8 @@ int main()
 		MazeLoader loaderOne;
 		loaderOne.enterBinName();
 		loaderOne.readLines();
-		loaderOne.startSVG();
+		loaderOne.beginSVG();
+		loaderOne.drawBorder();
 		loaderOne.readBinFileVector();
 		loaderOne.endSVG();
 	}

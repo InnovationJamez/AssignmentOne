@@ -555,7 +555,7 @@ std::string MazeGenerator::intToBin(int num)
 		{
 			binNum = '0' + binNum;
 		}
-		num = num/2;
+		num = num / 2;
 	}
 	while (binNum.size() < 32)
 	{
